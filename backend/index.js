@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // CORS Configuration
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://chatapplication-ih32.onrender.com",
   credentials: true, // Allow credentials
 }));
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import toast from "react-hot-toast";
-import { BASE_URL } from '..'; // Ensure this is correctly set
+
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -17,12 +17,10 @@ const Signup = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log("Signup button clicked!");
-    console.log("User data before sending:", user);
-    console.log("Sending request to:", `${BASE_URL}/api/v1/user/register`);
+    
 
     try {
-      const res = await axios.post(`${BASE_URL}/api/v1/user/register`, user, {
+      const res = await axios.post(`https://chatapplication-ih32.onrender.com/api/v1/user/register`, user, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
