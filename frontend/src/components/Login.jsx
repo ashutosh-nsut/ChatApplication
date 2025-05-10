@@ -20,24 +20,33 @@ const Login = () => {
     console.log("🔹 Sending login data:", user);
 
     try {
-      const res = await axios.post(`https://chatapplication-ih32.onrender.com/api/v1/user/login`, user, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true, // Needed for cookies
-      });
+        const res = await axios.post("https://chatapplication-ih32.onrender.com/api/v1/user/login", user, {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true, // Needed for cookies
+        });
 
-      if (res.data && res.data.success) {
-        dispatch(setAuthUser(res.data.user));
-        toast.success("Login successful!");
-        navigate("/");
-      } else {
-        toast.error(res.data.message || "Invalid credentials!");
-      }
-
+        if (res.data && res.data.success) {
+            dispatch(setAuthUser(res.data.user));
+            toast.success("Login successful!");
+            navigate("/");
+        } else {
+            toast.error(res.data.message || "Invalid credentials!");
+        }
     } catch (error) {
-      console.error("❌ Login failed:", error.response ? error.response.data : error);
-      toast.error(error.response?.data?.message || "Login failed. Please try again.");
+        // Improved error handling
+        if (error.response) {
+            console.error("❌ Login failed:", error.response.data);
+            toast.error(error.response.data.message || "Login failed. Please try again.");
+        } else if (error.request) {
+            console.error("❌ No response from server:", error.request);
+            toast.error("No response from the server. Please check your connection.");
+        } else {
+            console.error("❌ Error setting up request:", error.message);
+            toast.error("There was an error setting up the request.");
+        }
     }
-  };
+};
+
 
   return (
     <div className="min-w-96 mx-auto">
