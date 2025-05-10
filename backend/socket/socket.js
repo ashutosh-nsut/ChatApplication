@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
     userSocketMap[userId] = socket.id;
   }
 
-  // Emit the list of online users
+  // Emit the list of online users (you may modify the emitted data as needed)
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {

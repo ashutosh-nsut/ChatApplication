@@ -1,14 +1,21 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
 const socketSlice = createSlice({
-    name:"socket",
-    initialState:{
-        socket:null
+  name: "socket",
+  initialState: {
+    socketId: null,      // Store socket ID instead of the full socket object
+    isConnected: false,  // Store connection status
+  },
+  reducers: {
+    setSocketId: (state, action) => {
+      state.socketId = action.payload;  // Store the socket ID
     },
-    reducers:{
-        setSocket:(state, action)=>{
-            state.socket = action.payload;
-        }
-    }
+    setConnectionStatus: (state, action) => {
+      state.isConnected = action.payload;  // Store connection status (true/false)
+    },
+  },
 });
-export const {setSocket} = socketSlice.actions;
+
+export const { setSocketId, setConnectionStatus } = socketSlice.actions;
+
 export default socketSlice.reducer;

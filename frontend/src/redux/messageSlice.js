@@ -1,15 +1,44 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import userReducer from "./userSlice.js";
+import messageReducer from "./messageSlice.js";
+import socketReducer from "./socketSlice.js";
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-const messageSlice = createSlice({
-    name:"message",
-    initialState:{
-        messages:null,
-    },
-    reducers:{
-        setMessages:(state,action)=>{
-            state.messages = action.payload;
-        }
-    }
+// Persist configuration
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+  blacklist: ["socket"], // Exclude socket from persistence
+};
+
+// Combine reducers
+const rootReducer = combineReducers({
+  user: userReducer,
+  message: messageReducer,
+  socket: socketReducer, // socket reducer is now just serializable data
 });
-export const {setMessages} = messageSlice.actions;
-export default messageSlice.reducer;
+
+// Persist the reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export default store;
